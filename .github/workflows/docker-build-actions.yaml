@@ -1,0 +1,35 @@
+name: CI/CD Pipeline
+ 
+on:
+  push:
+    branches: [ main ]  # Trigger on pushes to the main branch
+ 
+jobs:
+  build-and-push:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+ 
+      - name: Login to Docker Hub
+        run: echo ${{ secrets.DOCKER_PASSWORD }} | docker login -u ${{ secrets.DOCKER_USERNAME }} --password-stdin
+ 
+      - name: Build and push Docker image
+        run: |
+          docker build -t sai121212/wisecow:latest .
+          docker push sai121212/wisecow:latest
+ 
+  #  Deploy to Kubernetes (Challenge Goal)
+  deploy-to-kubernetes:  # Uncomment this section and configure for deployment
+    runs-on: ubuntu-latest
+    needs: build-and-push  # This job depends on the successful completion of build-and-push
+    steps:
+      - uses: actions/checkout@v3
+ 
+      - name: Setup Minikube
+        uses: medyagh/setup-minikube@latest
+        with:
+          minikube version: stable # Replace with desired version
+          kubernetes version: stable  # Replace with desired version
+ 
+      - name: Deploy the application (replace with your deployment manifest)
+        run: kubectl apply -f deployment.yaml -f service.yaml -f ingress.yaml
