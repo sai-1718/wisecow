@@ -28,8 +28,8 @@ jobs:
       - name: Setup Minikube
         uses: medyagh/setup-minikube@latest
         with:
-          minikube-version: v1.29.2  # Correct input key
-          kubernetes-version: v1.25.5  # Correct input key
+          minikube version: v1.29.2  # Correct input key
+          kubernetes version: v1.25.5  # Correct input key
  
       - name: Deploy the application (replace with your deployment manifest)
         run: kubectl apply -f deployment.yaml -f service.yaml -f ingress.yaml
